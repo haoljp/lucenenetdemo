@@ -1,0 +1,17 @@
+﻿@model LuceneSearch.Core.Services.ServiceModel.BookSearchResponse
+
+<div class="col-md-12 text-muted" style="margin-bottom:30px">
+    @Model.TotalResults results in  @Model.SearchTime milliseconds
+</div>
+
+    @foreach (var book in Model.Books)
+    { 
+        <div class="col-md-12" style="margin-bottom:20px">
+        <h4 class="text-info" style="padding:0; margin:0">@book.Title </h4>
+            <p style="padding:0; margin:0"><b>@book.SubTitle </b></p>
+            <p style="margin:0"><span  class="label label-success">ISBN: @book.isbn</span></p>
+        <p>@book.Description</p>
+        </div>
+        
+        
+    }
