@@ -10,7 +10,7 @@ namespace LuceneSearch.Core.Services
         ///  Adds index entries from excel file
         /// </summary>
         /// <param name="excelFile">The excel file.</param>
-        void AddBooksToIndex(string excelFile);
+        void AddBooksToIndex(string csvFile);
         
         /// <summary>
         /// Searches the book index
@@ -18,9 +18,6 @@ namespace LuceneSearch.Core.Services
         /// <param name="query">The query.</param>
         /// <returns></returns>
         BookSearchResponse SearchBooks(string query);
-
-
-        void AddBooksFromExternalSource();
     }
 
 }

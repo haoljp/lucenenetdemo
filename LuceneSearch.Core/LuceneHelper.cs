@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 
 #endregion
+
 namespace LuceneSearch.Core
 {
     /// <summary>
@@ -117,6 +118,7 @@ namespace LuceneSearch.Core
                     TotalResults = results.Count,
                     Books = results
                 };
+
                 analyzer.Close();
                 searcher.Dispose();
                 return response;
@@ -128,8 +130,14 @@ namespace LuceneSearch.Core
         ///  This must be called once during the application startup
         /// </summary>
         /// <param name="luceneDirectory"></param>
-        public static void InitializeInstance(string luceneDirectory)
+        public static void InitializeInstance(string luceneDirectory, bool resetIndex)
         {
+            if (System.IO.Directory.Exists(luceneDirectory) && resetIndex)
+            {
+                System.IO.Directory.Delete(luceneDirectory, true);
+            }
+
+            System.IO.Directory.CreateDirectory(luceneDirectory);
             luceneDirectoryPath = luceneDirectory;
         }
         
@@ -150,7 +158,6 @@ namespace LuceneSearch.Core
             doc.Add(new Field("Title", string.IsNullOrEmpty(book.Title) ? string.Empty : book.Title, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("SubTitle",string.IsNullOrEmpty(book.SubTitle) ? string.Empty : book.SubTitle, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Description",string.IsNullOrEmpty(book.Description) ? string.Empty : book.Description, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Author", string.IsNullOrEmpty(book.Author) ? string.Empty : book.Author, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("ISBN", book.isbn, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("ImageN", book.Image, Field.Store.YES, Field.Index.ANALYZED));
 
@@ -165,7 +172,6 @@ namespace LuceneSearch.Core
             return hits.Select(t => searcher.Doc(t.Doc)).Select(t => new Book
             {
                 Title = t.Get("Title"),
-                Author = t.Get("Author"),
                 ID = Convert.ToInt64(t.Get("Id")),
                 SubTitle = t.Get("SubTitle"),
                 Image = t.Get("ImageN"),

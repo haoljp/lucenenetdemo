@@ -1,10 +1,6 @@
 ﻿using LuceneSearch.Core;
 using LuceneSearch.Core.Services;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -16,11 +12,15 @@ namespace LuceneSearch.Web
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            string indexDirectory = ConfigurationManager.AppSettings["LuceneIndexDirectory"];
-            LuceneHelper.InitializeInstance(indexDirectory);
-            //var bookService = new BookService();
-            //bookService.AddBooksFromExternalSource();
-            //bookService.OptimizeIndex();
+
+            string indexDirectory = Server.MapPath("~/Content/BookIndex"); 
+            string csvFile = Server.MapPath("~/Content/CSVFile/book.csv");
+            var bookService = new BookService();
+
+            // you can comment bookService.AddBooksToIndex(csvFile); 
+            // i.e., after the first run and also set resetIndex as false
+            LuceneHelper.InitializeInstance(luceneDirectory: indexDirectory, resetIndex: true);
+            bookService.AddBooksToIndex(csvFile);
         }
     }
 }

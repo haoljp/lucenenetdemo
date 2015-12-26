@@ -1,13 +1,9 @@
-﻿using LinqToExcel;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿
 namespace LuceneSearch.Core.Model
 {
     public class Book
     {
         public long ID { get; set; }
-        public string Author { get; set; }
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public string Description {get;set;}
